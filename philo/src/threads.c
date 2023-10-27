@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:41 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 14:51:10 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 15:04:51 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*is_dead(void	*data)
 		pthread_mutex_unlock(&philo->args->eat);
 		pthread_mutex_unlock(&philo->args->done);
 		pthread_mutex_lock(&philo->args->write_mutex);
-		print_status("died🪦\n", philo);
+		print_status("died\n", philo);
 		pthread_mutex_unlock(&philo->args->write_mutex);
 		check_pulse(philo, 1);
 	}
