@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:41 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 03:02:53 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 14:51:10 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,19 @@ void	*is_dead(void	*data)
 	philo = (t_data *)data;
 	usleepingood(philo->args->time_to_die + 1);
 	pthread_mutex_lock(&philo->args->eat);
-	pthread_mutex_lock(&philo->args->finish);
-	if (!check_pulse(philo, 0) && !philo->finish && ((get_time() - \
-		philo->ms_eat) >= (long)(philo->args->time_to_die)))
+	pthread_mutex_lock(&philo->args->done);
+	if (!check_pulse(philo, 0) && !philo->done && ((get_time() - \
+		philo->last_eaten) >= (long)(philo->args->time_to_die)))
 	{
 		pthread_mutex_unlock(&philo->args->eat);
-		pthread_mutex_unlock(&philo->args->finish);
+		pthread_mutex_unlock(&philo->args->done);
 		pthread_mutex_lock(&philo->args->write_mutex);
 		print_status("died🪦\n", philo);
 		pthread_mutex_unlock(&philo->args->write_mutex);
 		check_pulse(philo, 1);
 	}
 	pthread_mutex_unlock(&philo->args->eat);
-	pthread_mutex_unlock(&philo->args->finish);
+	pthread_mutex_unlock(&philo->args->done);
 	return (NULL);
 }
 
@@ -45,9 +45,9 @@ avoid starting at the same time
 Enter a loop until one philosopher dies
 Create a new thread to perform the is_dead check concurrently,
 call routine and detach the thread.
-If the philosopher has eaten enough times, mark aas finished and increment
+If the philosopher has eaten enough times, mark aas doneed and increment
 done_eating_counter by 1 & check if all philos are done eating
-If everyone is done eating, unlock finish mutex and send stop signal*/
+If everyone is done eating, unlock done mutex and send stop signal*/
 void	*thread(void *data)
 {
 	t_data					*philo;
@@ -60,17 +60,17 @@ void	*thread(void *data)
 		pthread_create(&philo->thread_death_id, NULL, is_dead, data);
 		routine(philo);
 		pthread_detach(philo->thread_death_id);
-		if ((int)++philo->nb_eat == philo->args->meals)
+		if ((int)++philo->meals_eaten == philo->args->meals)
 		{
-			pthread_mutex_lock(&philo->args->finish);
-			philo->finish = 1;
+			pthread_mutex_lock(&philo->args->done);
+			philo->done = 1;
 			philo->args->done_eating_counter++;
 			if (philo->args->done_eating_counter == philo->args->philo_count)
 			{
-				pthread_mutex_unlock(&philo->args->finish);
+				pthread_mutex_unlock(&philo->args->done);
 				check_pulse(philo, 2);
 			}
-			pthread_mutex_unlock(&philo->args->finish);
+			pthread_mutex_unlock(&philo->args->done);
 			return (NULL);
 		}
 	}

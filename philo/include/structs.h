@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:17:38 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 03:02:53 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 14:51:10 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_args
 	pthread_mutex_t			write_mutex;
 	pthread_mutex_t			dead;
 	pthread_mutex_t			eat;
-	pthread_mutex_t			finish;
+	pthread_mutex_t			done;
 	int						done_eating_counter;
 	int						stop;
 }							t_args;
@@ -39,9 +39,9 @@ typedef struct s_data
 	pthread_mutex_t			*right_fork;
 	pthread_mutex_t			left_fork;
 	t_args					*args;
-	long int				ms_eat;
-	unsigned int			nb_eat;
-	int						finish;
+	long int				last_eaten;
+	unsigned int			meals_eaten;
+	int						done;
 }	t_data;
 
 typedef struct s_dump

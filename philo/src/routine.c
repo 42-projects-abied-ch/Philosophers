@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:51 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 03:02:53 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 14:48:34 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	routine(t_data *data)
 	pthread_mutex_lock(&data->args->write_mutex);
 	print_status("is eating🍽️\n", data);
 	pthread_mutex_lock(&data->args->eat);
-	data->ms_eat = get_time();
+	data->last_eaten = get_time();
 	pthread_mutex_unlock(&data->args->eat);
 	pthread_mutex_unlock(&data->args->write_mutex);
 	usleepingood(data->args->time_to_eat);

@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:14:57 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 03:02:53 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 14:51:10 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	mutex(t_dump *dump)
 	pthread_mutex_init(&dump->args.write_mutex, NULL);
 	pthread_mutex_init(&dump->args.dead, NULL);
 	pthread_mutex_init(&dump->args.eat, NULL);
-	pthread_mutex_init(&dump->args.finish, NULL);
+	pthread_mutex_init(&dump->args.done, NULL);
 }
 
 int	store_args(t_dump *dump)
@@ -32,9 +32,9 @@ int	store_args(t_dump *dump)
 	while (i < dump->args.philo_count)
 	{
 		dump->data[i].id = i + 1;
-		dump->data[i].ms_eat = dump->args.start_time;
-		dump->data[i].nb_eat = 0;
-		dump->data[i].finish = 0;
+		dump->data[i].last_eaten = dump->args.start_time;
+		dump->data[i].meals_eaten = 0;
+		dump->data[i].done = 0;
 		dump->data[i].right_fork = NULL;
 		pthread_mutex_init(&dump->data[i].left_fork, NULL);
 		if (dump->args.philo_count == 1)
