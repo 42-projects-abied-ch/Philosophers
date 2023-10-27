@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_input.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:56:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:12:00 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:06:20 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	get_input(int argc, char **argv, t_dump *dump)
 		if (argc == 6)
 			dump->args.meals = ft_atoi(argv[5]);
 		if (dump->args.philo_count <= 0 || dump->args.time_to_die <= 0 \
-			|| dump->args.time_to_eat <= 0 || dump->args.time_to_sleep <= 0)
+			|| dump->args.time_to_eat <= 0 || dump->args.time_to_sleep <= 0 \
+			|| dump->args.philo_count > 200)
 			return (0);
 		return (1);
 	}
