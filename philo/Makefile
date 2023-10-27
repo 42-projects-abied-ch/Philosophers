@@ -6,7 +6,7 @@
 #    By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 18:42:13 by abied-ch          #+#    #+#              #
-#    Updated: 2023/10/27 16:06:14 by abied-ch         ###   ########.fr        #
+#    Updated: 2023/10/27 18:46:34 by abied-ch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,5 +55,7 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+test:	
 
 .PHONY: all clean fclean re

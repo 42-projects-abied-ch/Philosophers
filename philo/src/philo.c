@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:36:22 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:30:24 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:45:20 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	stop(t_dump *dump)
 		pthread_mutex_destroy(&dump->data[i].left_fork);
 	if (dump->args.stop == 2)
 		printf("Each philosopher ate %d time(s)\n", dump->args.meals);
-	free(dump->data);
 }
 
 int	main(int argc, char **argv)
@@ -55,13 +54,7 @@ int	main(int argc, char **argv)
 
 	if (!(get_input(argc, argv, &dump)))
 		return (gtfo("bad input\n"));
-	dump.data = malloc(dump.args.philo_count * sizeof(t_data));
-	if (!dump.data)
-		return (gtfo("malloc failed\n"));
 	if (!store_args(&dump) || !spiderweb(&dump))
-	{
-		free(dump.data);
 		return (0);
-	}
 	stop(&dump);
 }

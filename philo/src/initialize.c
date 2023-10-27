@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:15:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:48:02 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:46:23 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ int	store_args(t_dump *dump)
 		else
 			dump->data[i].right_fork = &dump->data[i + 1].left_fork;
 	}
+
 	return (1);
 }
