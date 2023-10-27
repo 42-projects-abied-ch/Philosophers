@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initialize.c                                       :+:      :+:    :+:   */
+/*   init_and_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/27 02:14:57 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 14:51:10 by arthur           ###   ########.fr       */
+/*   Created: 2023/10/27 02:15:05 by arthur            #+#    #+#             */
+/*   Updated: 2023/10/27 15:11:50 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+/*Initialize mutexes to prevent data races*/
 void	mutex(t_dump *dump)
 {
 	pthread_mutex_init(&dump->args.write_mutex, NULL);
@@ -20,6 +21,11 @@ void	mutex(t_dump *dump)
 	pthread_mutex_init(&dump->args.done, NULL);
 }
 
+/*Store arguments in the structs, initialize a mutex for each
+philosopher's LEFT fork, the right one is just a pointer to next
+philosopher's left fork
+Return if only 1 philosopher, since it will automatically starve
+due to only having one fork*/
 int	store_args(t_dump *dump)
 {
 	int	i;

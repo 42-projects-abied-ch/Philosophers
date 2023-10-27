@@ -6,12 +6,13 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:56:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 02:27:13 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 15:12:00 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+/*Get input, check validity in the process*/
 int	get_input(int argc, char **argv, t_dump *dump)
 {
 	if ((argc == 5 || argc == 6) && isnum(argv, 0, 1))
