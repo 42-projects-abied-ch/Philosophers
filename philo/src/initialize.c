@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_and_parse.c                                   :+:      :+:    :+:   */
+/*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:15:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:11:50 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 15:48:02 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ int	store_args(t_dump *dump)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	dump->args.start_time = get_time();
 	dump->args.stop = 0;
 	dump->args.done_eating_counter = 0;
 	mutex(dump);
-	while (i < dump->args.philo_count)
+	while (++i < dump->args.philo_count)
 	{
 		dump->data[i].id = i + 1;
 		dump->data[i].last_eaten = dump->args.start_time;
@@ -49,7 +49,6 @@ int	store_args(t_dump *dump)
 			dump->data[i].right_fork = &dump->data[0].left_fork;
 		else
 			dump->data[i].right_fork = &dump->data[i + 1].left_fork;
-		i++;
 	}
 	return (1);
 }

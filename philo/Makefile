@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arthur <arthur@student.42.fr>              +#+  +:+       +#+         #
+#    By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 18:42:13 by abied-ch          #+#    #+#              #
-#    Updated: 2023/10/27 01:59:55 by arthur           ###   ########.fr        #
+#    Updated: 2023/10/27 15:28:05 by abied-ch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -Iincludes -g
+CFLAGS = -Wall -Wextra -Werror -Iincludes -g -fsanitize=address -fno-omit-frame-pointer
 
 RM = rm -rf
 

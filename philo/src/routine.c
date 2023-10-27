@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:51 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:04:34 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 15:58:37 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	print_status(char *str, t_data *data)
 	time = get_time() - data->args->start_time;
 	if (time >= 0 && time <= 2147483647 && !check_pulse(data, 0))
 	{
-		printf("%5ld ", time);
-		printf("%3d %s", data->id, str);
+		printf("%ld ", time);
+		printf("%d %s", data->id, str);
 	}
 }
 
