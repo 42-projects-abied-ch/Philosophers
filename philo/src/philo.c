@@ -6,7 +6,7 @@
 /*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:36:22 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 02:04:50 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/27 03:04:19 by arthur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	stop(t_dump *dump)
 	pthread_mutex_destroy(&dump->args.write_mutex);
 	i = -1;
 	while (++i < dump->args.philo_count)
-		pthread_mutex_destroy(&dump->data[i].l_f);
+		pthread_mutex_destroy(&dump->data[i].left_fork);
 	if (dump->args.stop == 2)
-		printf("Each philosopher ate %d time(s)\n", dump->args.m_eat);
+		printf("Each philosopher ate %d time(s)\n", dump->args.meals);
 	free(dump->data);
 }
 

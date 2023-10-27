@@ -1,57 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   threads.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/27 02:13:41 by arthur            #+#    #+#             */
+/*   Updated: 2023/10/27 03:02:53 by arthur           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosophers.h"
 
+/*Executed by a separate thread to monitor the time_to_die condition
+of each philosopher
+Sleep for time_to_die + 1, so we know that if the philo did not 
+eat within this time frame, it is dead. Prevents false positives, eg
+a philo being pronounced dead due to timing discrepancies.*/
 void	*is_dead(void	*data)
 {
-	t_data					*ph;
+	t_data	*philo;
 
-	ph = (t_data *)data;
-	usleepingood(ph->pa->time_to_die + 1);
-	pthread_mutex_lock(&ph->pa->time_eat);
-	pthread_mutex_lock(&ph->pa->finish);
-	if (!check_pulse(ph, 0) && !ph->finish && ((get_time() - ph->ms_eat) \
-		>= (long)(ph->pa->time_to_die)))
+	philo = (t_data *)data;
+	usleepingood(philo->args->time_to_die + 1);
+	pthread_mutex_lock(&philo->args->eat);
+	pthread_mutex_lock(&philo->args->finish);
+	if (!check_pulse(philo, 0) && !philo->finish && ((get_time() - \
+		philo->ms_eat) >= (long)(philo->args->time_to_die)))
 	{
-		pthread_mutex_unlock(&ph->pa->time_eat);
-		pthread_mutex_unlock(&ph->pa->finish);
-		pthread_mutex_lock(&ph->pa->write_mutex);
-		print_status("died🪦\n", ph);
-		pthread_mutex_unlock(&ph->pa->write_mutex);
-		check_pulse(ph, 1);
+		pthread_mutex_unlock(&philo->args->eat);
+		pthread_mutex_unlock(&philo->args->finish);
+		pthread_mutex_lock(&philo->args->write_mutex);
+		print_status("died🪦\n", philo);
+		pthread_mutex_unlock(&philo->args->write_mutex);
+		check_pulse(philo, 1);
 	}
-	pthread_mutex_unlock(&ph->pa->time_eat);
-	pthread_mutex_unlock(&ph->pa->finish);
+	pthread_mutex_unlock(&philo->args->eat);
+	pthread_mutex_unlock(&philo->args->finish);
 	return (NULL);
 }
 
+/*If philo ID is even, sleep for a fraction of the eating time to
+avoid starting at the same time
+Enter a loop until one philosopher dies
+Create a new thread to perform the is_dead check concurrently,
+call routine and detach the thread.
+If the philosopher has eaten enough times, mark aas finished and increment
+done_eating_counter by 1 & check if all philos are done eating
+If everyone is done eating, unlock finish mutex and send stop signal*/
 void	*thread(void *data)
 {
-	t_data					*ph;
+	t_data					*philo;
 
-	ph = (t_data *)data;
-	if (ph->id % 2 == 0)
-		usleepingood(ph->pa->time_to_eat / 10);
-	while (!check_pulse(ph, 0))
+	philo = (t_data *)data;
+	if (philo->id % 2 == 0)
+		usleepingood(philo->args->time_to_eat / 10);
+	while (!check_pulse(philo, 0))
 	{
-		pthread_create(&ph->thread_death_id, NULL, is_dead, data);
-		routine(ph);
-		pthread_detach(ph->thread_death_id);
-		if ((int)++ph->nb_eat == ph->pa->m_eat)
+		pthread_create(&philo->thread_death_id, NULL, is_dead, data);
+		routine(philo);
+		pthread_detach(philo->thread_death_id);
+		if ((int)++philo->nb_eat == philo->args->meals)
 		{
-			pthread_mutex_lock(&ph->pa->finish);
-			ph->finish = 1;
-			ph->pa->nb_p_finish++;
-			if (ph->pa->nb_p_finish == ph->pa->philo_count)
+			pthread_mutex_lock(&philo->args->finish);
+			philo->finish = 1;
+			philo->args->done_eating_counter++;
+			if (philo->args->done_eating_counter == philo->args->philo_count)
 			{
-				pthread_mutex_unlock(&ph->pa->finish);
-				check_pulse(ph, 2);
+				pthread_mutex_unlock(&philo->args->finish);
+				check_pulse(philo, 2);
 			}
-			pthread_mutex_unlock(&ph->pa->finish);
+			pthread_mutex_unlock(&philo->args->finish);
 			return (NULL);
 		}
 	}
 	return (NULL);
 }
 
+/*Iterate over all philosophers
+Assign dump->args (shared struct) to the args field of each
+struct array index so every thread can access it
+Create a new thread for each philosopher, pass the routine function
+Continue until all philos are initialized and threads are created*/
 int	spiderweb(t_dump *dump)
 {
 	int	i;
@@ -59,9 +89,10 @@ int	spiderweb(t_dump *dump)
 	i = 0;
 	while (i < dump->args.philo_count)
 	{
-		dump->data[i].pa = &dump->args;
-		if (pthread_create(&dump->data[i].thread_id, NULL, thread, &dump->data[i]) != 0)
-			return (gtfo("Pthread did not return 0\n"));
+		dump->data[i].args = &dump->args;
+		if (pthread_create(&dump->data[i].thread_id, NULL, thread,
+				&dump->data[i]) != 0)
+			return (gtfo("pthread failed\n"));
 		i++;
 	}
 	return (1);
