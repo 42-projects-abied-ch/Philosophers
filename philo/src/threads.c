@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:41 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 21:09:58 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/27 21:16:31 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	*thread(void *data)
 				pthread_mutex_unlock(&philo->args->done);
 				check_pulse(philo, 2);
 			}
-			pthread_mutex_unlock(&philo->args->done);
+			else
+				pthread_mutex_unlock(&philo->args->done);
 			return (NULL);
 		}
 	}
