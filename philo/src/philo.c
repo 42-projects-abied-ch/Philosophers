@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:36:22 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 18:45:20 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/28 11:48:07 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	gtfo(char *str)
 {
-	ft_putstr_fd("error: ", 2);
+	ft_putstr_fd("\x1b[31m\033[1merror: \x1b[0m", 2);
 	ft_putstr_fd(str, 2);
 	return (0);
 }
