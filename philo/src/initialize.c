@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:15:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/30 17:01:09 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:06:13 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,12 @@ int	mutex(t_dump *dump)
 		return (pthread_mutex_destroy(&dump->args.write_mutex),
 			pthread_mutex_destroy(&dump->args.dead), -1);
 	if (pthread_mutex_init(&dump->args.done, NULL) == -1)
-		return (pthread_mutex_destroy(&dump->args.write_mutex),
-			pthread_mutex_destroy(&dump->args.dead),
-			pthread_mutex_destroy(&dump->args.eat), -1);
+	{
+		pthread_mutex_destroy(&dump->args.write_mutex);
+		pthread_mutex_destroy(&dump->args.dead);
+		pthread_mutex_destroy(&dump->args.eat);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -35,8 +38,9 @@ void	wipe_mutexes(t_dump *dump)
 	pthread_mutex_destroy(&dump->args.write_mutex);
 	pthread_mutex_destroy(&dump->args.dead);
 	pthread_mutex_destroy(&dump->args.eat);
-	pthread_mutex_destroy(&dump->args.done);	
+	pthread_mutex_destroy(&dump->args.done);
 }
+
 /*Store arguments in the structs, initialize a mutex for each
 philosopher's LEFT fork, the right one is just a pointer to next
 philosopher's left fork

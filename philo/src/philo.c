@@ -6,11 +6,13 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:36:22 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/30 17:05:42 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:03:34 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+#include <bits/pthreadtypes.h>
+#include <pthread.h>
 
 int	gtfo(char *str)
 {
@@ -44,7 +46,9 @@ void	stop(t_dump *dump)
 	i = -1;
 	while (++i < dump->args.philo_count)
 		pthread_mutex_destroy(&dump->data[i].left_fork);
-	if (dump->args.stop == 2)
+	if (!dump->data->done)
+		return (free(dump->data));
+	if (dump->args.stop == 2 && dump->data->done)
 		printf("Each philosopher ate %d time(s)\n", dump->args.meals);
 	free(dump->data);
 }

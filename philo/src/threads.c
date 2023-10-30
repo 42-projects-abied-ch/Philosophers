@@ -6,11 +6,29 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:41 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 21:29:04 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:07:20 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static void	*one_isdead(void *data)
+{
+	t_dump	*dump;
+
+	dump = (t_dump *)data;
+	printf("1\t1 has taken a fork\n");
+	usleepingood(dump->args.time_to_die);
+	printf("%d\t1 died\n", dump->args.time_to_die + 1);
+	return (NULL);
+}
+
+void	one_philo(t_dump *dump)
+{
+	pthread_create(&dump->data->thread_death_id, NULL,
+		one_isdead, (void *)dump);
+	pthread_join(dump->data->thread_death_id, NULL);
+}
 
 /*Executed by a separate thread to monitor the time_to_die condition
 of each philosopher
@@ -52,28 +70,28 @@ done_eating_counter by 1 & check if all philos are done eating
 If everyone is done eating, unlock done mutex and send stop signal*/
 void	*thread(void *data)
 {
-	t_data					*philo;
+	t_data					*ph;
 
-	philo = (t_data *)data;
-	if (philo->id % 2 == 0)
-		usleepingood(philo->args->time_to_eat / 10);
-	while (!check_pulse(philo, 0))
+	ph = (t_data *)data;
+	if (ph->id % 2 == 0)
+		usleepingood(ph->args->time_to_eat / 10);
+	while (!check_pulse(ph, 0))
 	{
-		pthread_create(&philo->thread_death_id, NULL, is_dead, data);
-		routine(philo);
-		pthread_detach(philo->thread_death_id);
-		if ((int)++philo->meals_eaten == philo->args->meals)
+		pthread_create(&ph->thread_death_id, NULL, is_dead, data);
+		routine(ph);
+		pthread_detach(ph->thread_death_id);
+		if ((int)++ph->meals_eaten == ph->args->meals && !ph->args->stop)
 		{
-			pthread_mutex_lock(&philo->args->done);
-			philo->done = 1;
-			philo->args->done_eating_counter++;
-			if (philo->args->done_eating_counter == philo->args->philo_count)
+			pthread_mutex_lock(&ph->args->done);
+			ph->done = 1;
+			ph->args->done_eating_counter++;
+			if (ph->args->done_eating_counter == ph->args->philo_count)
 			{
-				pthread_mutex_unlock(&philo->args->done);
-				check_pulse(philo, 2);
+				pthread_mutex_unlock(&ph->args->done);
+				check_pulse(ph, 2);
 				return (NULL);
 			}
-			return (pthread_mutex_unlock(&philo->args->done), NULL);
+			return (pthread_mutex_unlock(&ph->args->done), NULL);
 		}
 	}
 	return (NULL);
@@ -89,6 +107,8 @@ int	spiderweb(t_dump *dump)
 	int	i;
 
 	i = 0;
+	if (dump->args.philo_count == 1)
+		return (one_philo(dump), 0);
 	while (i < dump->args.philo_count)
 	{
 		dump->data[i].args = &dump->args;
