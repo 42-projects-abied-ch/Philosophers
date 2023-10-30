@@ -6,11 +6,12 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 01:56:05 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 21:06:20 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:04:28 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+#include <stdio.h>
 
 /*Get input, check validity in the process*/
 int	get_input(int argc, char **argv, t_dump *dump)
@@ -25,8 +26,7 @@ int	get_input(int argc, char **argv, t_dump *dump)
 		if (argc == 6)
 			dump->args.meals = ft_atoi(argv[5]);
 		if (dump->args.philo_count <= 0 || dump->args.time_to_die <= 0 \
-			|| dump->args.time_to_eat <= 0 || dump->args.time_to_sleep <= 0 \
-			|| dump->args.philo_count > 200)
+			|| dump->args.time_to_eat <= 0 || dump->args.time_to_sleep <= 0)
 			return (0);
 		return (1);
 	}

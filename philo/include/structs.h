@@ -6,7 +6,7 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:17:38 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 18:45:37 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:55:41 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_data
 
 typedef struct s_dump
 {
-	t_data					data[200];
+	t_data					*data;
 	t_args					args;
 }	t_dump;
 

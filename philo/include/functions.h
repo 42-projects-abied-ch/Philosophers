@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arthur <arthur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:21:56 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 03:04:32 by arthur           ###   ########.fr       */
+/*   Updated: 2023/10/30 17:00:49 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void			print_status(char *str, t_data *ph);
 void			ft_putstr_fd(char *s, int fd);
 void			usleepingood(long int time_in_ms);
 long int		get_time(void);
+void			stop(t_dump *dump);
 
 /*THREADING*/
 int				spiderweb(t_dump *p);

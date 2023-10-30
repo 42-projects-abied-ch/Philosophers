@@ -6,11 +6,12 @@
 /*   By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 02:13:51 by arthur            #+#    #+#             */
-/*   Updated: 2023/10/27 15:58:37 by abied-ch         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:46:56 by abied-ch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+#include <pthread.h>
 
 /*Calculate elapsed time since start time, check for stop signal
 and print status with philo ID*/
@@ -40,6 +41,32 @@ void	sleep_think(t_data *data)
 	pthread_mutex_unlock(&data->args->write_mutex);
 }
 
+void	take_fork(t_data *data)
+{
+	if (data->id % 2 == 0)
+	{
+		pthread_mutex_lock(data->right_fork);
+		pthread_mutex_lock(&data->args->write_mutex);
+		print_status("has taken a fork\n", data);
+		pthread_mutex_unlock(&data->args->write_mutex);
+		pthread_mutex_lock(&data->left_fork);
+		pthread_mutex_lock(&data->args->write_mutex);
+		print_status("has taken a fork\n", data);
+		pthread_mutex_unlock(&data->args->write_mutex);
+	}
+	else
+	{
+		pthread_mutex_lock(&data->left_fork);
+		pthread_mutex_lock(&data->args->write_mutex);
+		print_status("has taken a fork\n", data);
+		pthread_mutex_unlock(&data->args->write_mutex);
+		pthread_mutex_lock(data->right_fork);
+		pthread_mutex_lock(&data->args->write_mutex);
+		print_status("has taken a fork\n", data);
+		pthread_mutex_unlock(&data->args->write_mutex);
+	}
+}
+
 /*Routine of the philosopher
 Lock left fork, print status for taking fork
 If right fork is not available, sleep and come back to it, 
@@ -48,25 +75,13 @@ and eat.
 Record eating time, releases locks, sleep for eating time & unlock forks*/
 void	routine(t_data *data)
 {
-	pthread_mutex_lock(&data->left_fork);
-	pthread_mutex_lock(&data->args->write_mutex);
-	print_status("has taken a fork\n", data);
-	pthread_mutex_unlock(&data->args->write_mutex);
-	if (!data->right_fork)
-	{
-		usleepingood(data->args->time_to_die * 2);
-		return ;
-	}
-	pthread_mutex_lock(data->right_fork);
-	pthread_mutex_lock(&data->args->write_mutex);
-	print_status("has taken a fork\n", data);
-	pthread_mutex_unlock(&data->args->write_mutex);
+	take_fork(data);
 	pthread_mutex_lock(&data->args->write_mutex);
 	print_status("is eating\n", data);
+	pthread_mutex_unlock(&data->args->write_mutex);
 	pthread_mutex_lock(&data->args->eat);
 	data->last_eaten = get_time();
 	pthread_mutex_unlock(&data->args->eat);
-	pthread_mutex_unlock(&data->args->write_mutex);
 	usleepingood(data->args->time_to_eat);
 	pthread_mutex_unlock(data->right_fork);
 	pthread_mutex_unlock(&data->left_fork);

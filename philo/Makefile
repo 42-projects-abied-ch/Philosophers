@@ -6,7 +6,7 @@
 #    By: abied-ch <abied-ch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 18:42:13 by abied-ch          #+#    #+#              #
-#    Updated: 2023/10/27 21:21:09 by abied-ch         ###   ########.fr        #
+#    Updated: 2023/10/30 16:48:01 by abied-ch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,6 @@ fclean: clean
 re: fclean all
 
 test: all
-	clear; valgrind --tool=helgrind --tool=drd ./$(NAME) $(PHILO) 
+	clear; valgrind --tool=helgrind ./$(NAME) $(PHILO) # --tool=drd
 
 .PHONY: all clean fclean re
