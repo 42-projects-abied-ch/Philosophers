@@ -1,5 +1,7 @@
 # Philosophers
 
+42 uni project
+
 ## Tasks
 
 Solve the dining philosopher's problem using mulitthreading
